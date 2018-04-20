@@ -3,6 +3,7 @@ package com.sien.es;
 import com.sien.entity.Principal;
 import com.sien.es.dao.PrincipalSearchRepository;
 import com.sien.service.DataImportExecutor;
+import com.sien.service.DataInfoService;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -23,7 +24,7 @@ public class EsApplicationTests {
 
 	@Test
 	public void contextLoads() {
-		dataImportExecutor.dataImport("importInfo.properties");
+		dataImportExecutor.dataImport("dataImport.xml");
 	}
 
 	@Test
@@ -39,7 +40,4 @@ public class EsApplicationTests {
 	public void deleteTest() {
 		principalSearchRepository.deleteById(1);
 	}
-
-
-
 }

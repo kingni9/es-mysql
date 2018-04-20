@@ -12,7 +12,17 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class TableInfo {
+public class DataInfo {
+
+    /**
+     * 索引名称
+     */
+    private String index;
+
+    /**
+     * 类型
+     */
+    private String type;
 
     /**
      * 表名称
@@ -22,7 +32,7 @@ public class TableInfo {
     /**
      * 导入数据执行sql
      */
-    private String sql;
+    private String importSql;
 
     /**
      * 主键key

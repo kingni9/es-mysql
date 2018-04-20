@@ -13,7 +13,7 @@ import java.util.Date;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-@Document(indexName="main",type="principal",refreshInterval="-1")
+@Document(indexName="main",type="pt_principal",refreshInterval="-1")
 public class Principal {
     /**
      * 负责人ID
