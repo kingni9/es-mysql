@@ -7,7 +7,6 @@
 	<artifactId>es-mysql</artifactId>
 	<version>1.0.2-SNAPSHOT</version>
 	<packaging>jar</packaging>
-
 	<name>es-mysql</name>
 
 	<parent>
