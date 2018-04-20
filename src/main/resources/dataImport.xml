@@ -7,6 +7,6 @@
         <!-- 表名 -->
         <tableName>pt_principal</tableName>
         <!-- 数据导入sql -->
-        <importSql>select * from pt_principal where principalId = 1</importSql>
+        <importSql>select * from pt_principal</importSql>
     </index>
 </data>
