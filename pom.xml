@@ -4,12 +4,11 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<groupId>com.sien</groupId>
-	<artifactId>es</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<artifactId>es-mysql</artifactId>
+	<version>1.0.2-SNAPSHOT</version>
 	<packaging>jar</packaging>
 
-	<name>es</name>
-	<description>Demo project for Spring Boot</description>
+	<name>es-mysql</name>
 
 	<parent>
 		<groupId>org.springframework.boot</groupId>
