@@ -23,16 +23,23 @@ public class EsApplicationTests {
 
 	@Test
 	public void contextLoads() {
-		dataImportExecutor.dataImport("");
+		dataImportExecutor.dataImport("importInfo.properties");
 	}
 
 	@Test
-	public void get() {
+	public void getTest() {
 		Optional<Principal> optionalPrincipal = principalSearchRepository.findById(1);
 
 		if(optionalPrincipal.isPresent()) {
 			System.out.println(optionalPrincipal);
 		}
 	}
+
+	@Test
+	public void deleteTest() {
+		principalSearchRepository.deleteById(1);
+	}
+
+
 
 }
