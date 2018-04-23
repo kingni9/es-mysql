@@ -28,14 +28,15 @@ public class DataImportExecutor {
         if(!CollectionUtils.isEmpty(dataInfoList)) {
             dataInfoList.stream().forEach(o -> {
                 List<Map<String, Object>> maps = dataInfoService.getData(o);
-                this.indexStore(o, maps);
+                o.setRecords(maps);
+                this.indexStore(o);
             });
         }
 
     }
 
-    private void indexStore(DataInfo dataInfo, List<Map<String, Object>> maps) {
-        maps.stream().forEach(o -> {
+    private void indexStore(DataInfo dataInfo) {
+        dataInfo.getRecords().stream().forEach(o -> {
             IndexQuery indexQuery = new IndexQuery();
             indexQuery.setIndexName(dataInfo.getIndex());
             indexQuery.setType(dataInfo.getType());
