@@ -1,12 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <data>
-    <!-- 索引名称 -->
     <index name="main">
-        <!-- 类型名称 -->
-        <type>pt_principal</type>
-        <!-- 表名 -->
-        <tableName>pt_principal</tableName>
-        <!-- 数据导入sql -->
-        <importSql>select * from pt_principal</importSql>
+        <type>pt_city</type>
+        <tableName>pt_city</tableName>
+        <importSql>select * from pt_city where RegionCityCode is not null</importSql>
     </index>
 </data>
