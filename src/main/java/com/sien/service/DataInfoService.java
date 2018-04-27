@@ -124,7 +124,8 @@ public class DataInfoService {
     }
 
     private List<Map<String, Object>> resultHandle(List<Map<String, Object>> maps, DataInfo dataInfo) {
-        // simple version : direct import..
+        // TODO: 2018/4/27 定制化Map的key值映射成实际业务JavaBean的字段值 -- 可根据业务自行实现
+
 
         return maps;
     }
