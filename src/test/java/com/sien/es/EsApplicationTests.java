@@ -3,7 +3,7 @@ package com.sien.es;
 import com.alibaba.fastjson.JSON;
 import com.sien.entity.City;
 import com.sien.es.dao.CitySearchRepository;
-import com.sien.service.mysql.DataImportExecutor;
+import com.sien.business.service.dataImport.DataImportExecutor;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Test;
 import org.junit.runner.RunWith;
