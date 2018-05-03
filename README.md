@@ -1,5 +1,5 @@
 主要功能：通过配置，将mysql数据导入elasticsearch（当前版本只兼容JaveBean字段名称和表字段名称相同的场景） <br>
-当前版本：1.0.2 <br>
+当前版本：1.0.3 <br>
 导入步骤:<br>
 &nbsp;&nbsp;&nbsp;1、提供dataImport.xml配置文件，配置规范如下：<br>
 ```
