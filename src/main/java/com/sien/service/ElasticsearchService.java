@@ -1,10 +1,15 @@
 package com.sien.service;
 
+import com.alibaba.fastjson.JSON;
+import com.sien.entity.DataInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.elasticsearch.core.ElasticsearchOperations;
-import org.springframework.data.elasticsearch.core.ElasticsearchTemplate;
 import org.springframework.data.elasticsearch.core.query.IndexQuery;
+import org.springframework.data.elasticsearch.core.query.IndexQueryBuilder;
 import org.springframework.stereotype.Component;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Created by zhuangjt on 2018/4/20.
@@ -12,11 +17,18 @@ import org.springframework.stereotype.Component;
 @Component
 public class ElasticsearchService {
     @Autowired
-    private ElasticsearchTemplate elasticsearchTemplate;
+    private ElasticsearchOperations elasticsearchOperations;
 
-    public String save(IndexQuery indexQuery) {
-        String documentId = elasticsearchTemplate.index(indexQuery);
+    public void save(DataInfo dataInfo) {
+        List<IndexQuery> indexQueries = dataInfo.getRecords().stream().map(o -> new IndexQueryBuilder()
+                .withIndexName(dataInfo.getIndex())
+                .withType(dataInfo.getType())
+                .withId(o.get(dataInfo.getPrimaryKey()).toString())
+                .withSource(JSON.toJSONString(o))
+                .build())
+                .collect(Collectors.toList());
 
-        return documentId;
+        elasticsearchOperations.bulkIndex(indexQueries);
+        elasticsearchOperations.refresh(dataInfo.getIndex());
     }
 }

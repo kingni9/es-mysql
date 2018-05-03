@@ -1,6 +1,6 @@
 package com.sien.service;
 
-import com.sien.constants.DocumentNodeContant;
+import com.sien.constants.DocumentNodeConstant;
 import com.sien.db.dao.CommonDAO;
 import com.sien.entity.CommonColumn;
 import com.sien.entity.DataInfo;
@@ -54,9 +54,9 @@ public class DataInfoService {
                     continue;
                 }
 
-                Element type = index.element(DocumentNodeContant.ELEMENT_TYPE);
-                Element tableName = index.element(DocumentNodeContant.ELEMENT_TABLE_NAME);
-                Element importSql = index.element(DocumentNodeContant.ELEMENT_IMPORT_SQL);
+                Element type = index.element(DocumentNodeConstant.ELEMENT_TYPE);
+                Element tableName = index.element(DocumentNodeConstant.ELEMENT_TABLE_NAME);
+                Element importSql = index.element(DocumentNodeConstant.ELEMENT_IMPORT_SQL);
 
                 if(type == null || type.getData() == null) {
                     log.warn("no type data found...");
@@ -73,33 +73,16 @@ public class DataInfoService {
                     continue;
                 }
 
-                List<CommonColumn> commonColumns = commonDAO.getColumns(tableName.getData().toString());
-                if(CollectionUtils.isEmpty(commonColumns)) {
-                    log.warn("table " + tableName.getData().toString() + " not exists");
-                    continue;
-                }
-
-                Optional<CommonColumn> optionalCommonColumn = commonColumns.stream()
-                        .filter(o -> StringUtils.isNotBlank(o.getKey()) && o.getKey().equalsIgnoreCase(MYSQL_PRI))
-                        .findFirst();
-
-                if(!optionalCommonColumn.isPresent()) {
-                    log.error("table " + tableName + " cont not get a primary key");
-                    continue;
-                }
-
                 dataInfoList.add(DataInfo.builder()
                         .index(indexName.getValue())
                         .type(type.getData().toString())
                         .tableName(tableName.getData().toString())
                         .importSql(importSql.getData().toString())
-                        .primaryKey(optionalCommonColumn.get().getField())
-                        .commonColumns(commonColumns)
                         .build());
 
             }
 
-            return dataInfoList;
+            return this.initTableColumns(dataInfoList);
         } catch (Exception e) {
             log.error("failed to parse table info", e);
         }
@@ -107,20 +90,40 @@ public class DataInfoService {
         return Collections.emptyList();
     }
 
-    public List<Map<String, Object>> getData(DataInfo dataInfo) {
-        String sql = dataInfo.getImportSql();
-        if(StringUtils.isBlank(sql)) {
-            log.warn("table " + dataInfo.getTableName() + " not data  need to import : no sql found");
+    private List<DataInfo> initTableColumns(List<DataInfo> dataInfoList) {
+        if(CollectionUtils.isEmpty(dataInfoList)) {
+            log.warn("failed to initTableColumns: dataInfoList is empty!");
             return Collections.emptyList();
         }
 
-        List<Map<String, Object>> maps = commonDAO.getForMap(dataInfo.getImportSql());
-        if(CollectionUtils.isEmpty(maps)) {
-            log.warn("table " + dataInfo.getTableName() + " not data  need to import : no data found");
-            return Collections.emptyList();
+        for(DataInfo dataInfo : dataInfoList) {
+            List<CommonColumn> commonColumns = commonDAO.getColumns(dataInfo.getTableName());
+            if(CollectionUtils.isEmpty(commonColumns)) {
+                log.warn("table " + dataInfo.getTableName() + " not exists");
+                continue;
+            }
+
+            Optional<CommonColumn> optionalCommonColumn = commonColumns.stream()
+                    .filter(o -> StringUtils.isNotBlank(o.getKey()) && o.getKey().equalsIgnoreCase(MYSQL_PRI))
+                    .findFirst();
+
+            if(!optionalCommonColumn.isPresent()) {
+                log.error("table " + dataInfo.getTableName() + " cont not get a primary key");
+                continue;
+            }
+
+            List<Map<String, Object>> maps = commonDAO.getForMap(dataInfo.getImportSql());
+            if(CollectionUtils.isEmpty(maps)) {
+                log.warn("table " + dataInfo.getTableName() + " not data  need to import : no data found");
+                continue;
+            }
+
+            dataInfo.setPrimaryKey(optionalCommonColumn.get().getField());
+            dataInfo.setCommonColumns(commonColumns);
+            dataInfo.setRecords(maps);
         }
 
-        return this.resultHandle(maps, dataInfo);
+        return dataInfoList;
     }
 
     private List<Map<String, Object>> resultHandle(List<Map<String, Object>> maps, DataInfo dataInfo) {
